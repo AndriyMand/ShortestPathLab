@@ -14,7 +14,7 @@ namespace TestSpace
 
         public Labirunt()
         {
-            file = File.ReadAllLines("filee5.txt");
+            file = File.ReadAllLines("filee6.txt");
             rows_count = file.Length;
             cell_count = file[0].Length;
             labirynt = new char[rows_count, cell_count];
