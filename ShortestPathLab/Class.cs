@@ -12,19 +12,18 @@ namespace TestSpace
         string[] file;
         int[] countOfSteps;
         char[,] labirynt;
-        bool[,] correctPath;
+        char[,] shortestPath;
         char[,] correctPath1;
         bool[,] wasHere;
         int n;
-        int count;
 
         int rows_count;
         int cell_count;
 
         char freeway = '0';
-        char wall = '1';
+
         char enter = '2';
         char exit = '3';
-        char checkedWay = '+';
+
     }
 }

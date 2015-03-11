@@ -11,9 +11,10 @@ namespace TestSpace
         public static void Main(string[] args)
         {
             Labirunt lab = new Labirunt();
+
             lab.PrintLabirynt();
             lab.Check();
-            lab.Lengthh();
+            lab.PrintShortestPath();
 
             Console.ReadKey();
         }

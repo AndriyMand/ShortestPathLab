@@ -19,10 +19,9 @@ namespace TestSpace
             cell_count = file[0].Length;
             labirynt = new char[rows_count, cell_count];
             wasHere = new bool[rows_count, cell_count];
-            correctPath = new bool[rows_count, cell_count];
+            shortestPath = new char[rows_count, cell_count];
             correctPath1 = new char[rows_count, cell_count];
             n = 0;
-            count = 0;
             countOfSteps = new int[100];
             for (int i = 0; i < file.Length; i++)
             {
@@ -30,15 +29,14 @@ namespace TestSpace
                 {
                     labirynt[i, j] = Convert.ToChar(file[i][j]);
                     wasHere[i, j] = false;
-                    correctPath[i, j] = false;
                 }
             }
-
             for (int i = 0; i < file.Length; i++)
             {
                 for (int j = 0; j < file[0].Length; j++)
                 {
-                    correctPath1[i, j] = ' ';
+                    correctPath1[i, j] = '.';
+                    shortestPath[i, j] = '.';
                 }
             }
         }
@@ -57,222 +55,149 @@ namespace TestSpace
             Console.WriteLine();
         }
 
-        public void PrintPath()
+        public void PrintShortestPath()
         {
-
-            count = 0;
-            Console.WriteLine();
-            Console.WriteLine("Path number " + (n + 1) + ":");
-            Console.WriteLine();
+            int pathLangth = 0;
+            Console.WriteLine("\n\n\n");
             for (int i = 0; i < rows_count; i++)
             {
                 for (int j = 0; j < cell_count; j++)
                 {
-                    Console.Write(correctPath1[i, j]);
-                    if (correctPath1[i, j] == '+')
-                        count++;
+                    Console.Write(shortestPath[i, j]);
+                    if (shortestPath[i, j] == '+')
+                        pathLangth++;
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine();
-            countOfSteps[n] = count;
-            Console.WriteLine("This path has " + count + " steps!");
-            n++;
+            Console.WriteLine("This path has " + pathLangth + " steps and it is shortest");
         }
 
-        public void Lengthh()
+        public void PrintPathes()
         {
+            int count = 0;
+            for (int i = 0; i < rows_count; i++)
+            {
+                for (int j = 0; j < cell_count; j++)
+                {
+                    //Console.Write(correctPath1[i, j]);
+                    if (correctPath1[i, j] == '+')
+                        count++;
+                }
+                //Console.WriteLine();
+            }
+            //Console.WriteLine();
+            countOfSteps[n] = count;
+
             int min = countOfSteps[0];
             int indexx = 0;
-
-            for (int i = 0; i < n; i++)
-            {
-                if (countOfSteps[i] < min)
+            if(n!=0)
+                if (countOfSteps[n] < min)
                 {
-                    min = countOfSteps[i];
-                    indexx = i;
+                    min = countOfSteps[n];
+                    indexx = n;
+                    for (int i = 0; i < rows_count; i++)
+                    {
+                        for (int j = 0; j < cell_count; j++)
+                        {
+                            shortestPath[i, j] = correctPath1[i, j];
+                        }
+                    }
                 }
-            }
-            Console.WriteLine();
-            Console.WriteLine("The path number " + (indexx + 1) + " is shortest: length = " + min);
-
+            Console.WriteLine("Path number " + (n+1) + " has " + count + " steps!");
+            n++;
         }
 
         public void Check() // Шукає вхід
         {
-            for (int j = 0; j < cell_count; j++)
+            for (int i = 0; i < rows_count; i++)
             {
-                if (labirynt[0, j] == enter) // Коли ми знайшли вхід, ми перевіряємо, куди можна піти
+                for (int j = 0; j < cell_count; j++)
                 {
-                    Console.WriteLine("Enter found");
-                    wasHere[0, j] = true;
-                    correctPath[0, j] = true;
-                    IfCheckDown(0, j);
+                    if (labirynt[i, j] == enter) // Коли ми знайшли вхід, ми перевіряємо, куди можна піти
+                    {
+                        wasHere[i, j] = true;
+                        CheckDown(i, j);
+                    }
                 }
             }
+
         }
 
-
-        public bool CheckLeft(int i, int j)
-        {
-            j = j - 1;
-            if (labirynt[i, j] == freeway)
-                return true;
-            return false;
-        }
-
-        public bool CheckRight(int i, int j)
-        {
-            j = j + 1;
-            if (labirynt[i, j] == freeway)
-                return true;
-            return false;
-        }
-
-        public bool CheckDown(int i, int j)
-        {
-            i = i + 1;
-            if (labirynt[i, j] == freeway)
-                return true;
-            return false;
-        }
-
-        public bool CheckUp(int i, int j)
-        {
-            i = i - 1;
-            if (labirynt[i, j] == freeway)
-                return true;
-            return false;
-        }
-
-        void SetPluss(int i, int j)
-        {
-            correctPath1[i, j] = '+';
-            correctPath1[i, j - 1] = '3';
-            PrintPath();
-        }
-
-        public bool CheckExit(int i, int j)
+         public bool CheckExit(int i, int j)
         {
             if (labirynt[i, j - 1] == exit)
             {
-                SetPluss(i, j);
+                correctPath1[i, j] = '+';
+                correctPath1[i, j - 1] = '+';
+                PrintPathes();
                 return true;
             }
             if (labirynt[i, j + 1] == exit)
             {
-                SetPluss(i, j);
+                correctPath1[i, j] = '+';
+                correctPath1[i, j + 1] = '+';
+                PrintPathes();
                 return true;
             }
             if (labirynt[i - 1, j] == exit)
             {
-                SetPluss(i, j);
+                correctPath1[i, j] = '+';
+                correctPath1[i - 1, j] = '+';
+                PrintPathes();
                 return true;
             }
             if (labirynt[i + 1, j] == exit)
             {
-                SetPluss(i, j);
+                correctPath1[i, j] = '+';
+                correctPath1[i + 1, j] = '+';
+                PrintPathes();
                 return true;
             }
             return false;
         }
 
-
-        void IfCheckLeft(int i, int j)
+        void GeneralCheck(int i, int j, int i1, int j1, Ck Func1, Ck Func2, Ck Func3)
         {
-            if (CheckLeft(i, j) && wasHere[i, j - 1] == false)
+            if (labirynt[i1, j1] == freeway && wasHere[i1, j1] == false)
             {
-
                 correctPath1[i, j] = '+';
                 wasHere[i, j] = true;
 
-                j = j - 1;
-
-                if (CheckExit(i, j))
-                { }
-                else
+                if (CheckExit(i1, j1) != true)
                 {
-                    IfCheckUp(i, j);
-                    IfCheckLeft(i, j);
-                    IfCheckDown(i, j);
+                    Func1(i1, j1);
+                    Func2(i1, j1);
+                    Func3(i1, j1);
                 }
-                //correctPath1[i, j + 1] = ' ';
+                correctPath1[i1, j1] = ' ';
+                wasHere[i1, j1] = false;
             }
-
             correctPath1[i, j] = ' ';
             wasHere[i, j] = false;
         }
 
-        void IfCheckDown(int i, int j)
+        void CheckLeft(int i, int j)
         {
-            if (CheckDown(i, j) && wasHere[i + 1, j] == false)
-            {
-
-                correctPath1[i, j] = '+';
-                wasHere[i, j] = true;
-                i = i + 1;
-
-                if (CheckExit(i, j))
-                { }
-                else
-                {
-                    IfCheckLeft(i, j);
-                    IfCheckDown(i, j);
-                    IfCheckRight(i, j);
-                }
-                //correctPath1[i - 1, j] = ' ';
-            }
-
-            correctPath1[i, j] = ' ';
-            wasHere[i, j] = false;
+            int j1 = j - 1;
+            GeneralCheck(i, j, i, j1, CheckUp, CheckLeft, CheckDown);
         }
 
-        void IfCheckRight(int i, int j)
+        void CheckDown(int i, int j)
         {
-            if (CheckRight(i, j) && wasHere[i, j + 1] == false)
-            {
-
-                correctPath1[i, j] = '+';
-                wasHere[i, j] = true;
-                j = j + 1;
-
-                if (CheckExit(i, j))
-                { }
-                else
-                {
-                    IfCheckDown(i, j);
-                    IfCheckRight(i, j);
-                    IfCheckUp(i, j);
-                }
-                //correctPath1[i, j - 1] = ' ';
-            }
-
-            correctPath1[i, j] = ' ';
-            wasHere[i, j] = false;
+            int i1 = i + 1;
+            GeneralCheck(i, j, i1, j, CheckLeft, CheckDown, CheckRight);
         }
 
-        void IfCheckUp(int i, int j)
+        void CheckRight(int i, int j)
         {
-            if (CheckUp(i, j) && wasHere[i - 1, j] == false)
-            {
+            int j1 = j + 1;
+            GeneralCheck(i, j, i, j1, CheckDown, CheckRight, CheckUp);
+        }
 
-                correctPath1[i, j] = '+';
-                wasHere[i, j] = true;
-                i = i - 1;
-
-                if (CheckExit(i, j))
-                { }
-                else
-                {
-                    IfCheckRight(i, j);
-                    IfCheckUp(i, j);
-                    IfCheckLeft(i, j);
-                }
-                //correctPath1[i + 1, j] = ' ';
-            }
-
-            correctPath1[i, j] = ' ';
-            wasHere[i, j] = false;
+        void CheckUp(int i, int j)
+        {
+            int i1 = i - 1;
+            GeneralCheck(i, j, i1, j, CheckRight, CheckUp, CheckLeft);
         }
     }
 }
