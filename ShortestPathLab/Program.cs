@@ -14,7 +14,7 @@ namespace TestSpace
 
         public Labirunt()
         {
-            file = File.ReadAllLines("E:\\filee6.txt");
+            file = File.ReadAllLines("filee5.txt");
             rows_count = file.Length;
             cell_count = file[0].Length;
             labirynt = new char[rows_count, cell_count];
@@ -90,7 +90,8 @@ namespace TestSpace
 
             int min = countOfSteps[0];
             int indexx = 0;
-            if(n!=0)
+            if (n != 0)
+            {
                 if (countOfSteps[n] < min)
                 {
                     min = countOfSteps[n];
@@ -103,6 +104,17 @@ namespace TestSpace
                         }
                     }
                 }
+            }
+            else
+            {
+                for (int i = 0; i < rows_count; i++)
+                {
+                    for (int j = 0; j < cell_count; j++)
+                    {
+                        shortestPath[i, j] = correctPath1[i, j];
+                    }
+                }
+            }
             Console.WriteLine("Path number " + (n+1) + " has " + count + " steps!");
             n++;
         }
