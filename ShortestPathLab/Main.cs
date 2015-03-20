@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace TestSpace
+namespace LabiryntSpace
 {
     class MainClass
     {
         public static void Main(string[] args)
         {
-            Labirunt lab = new Labirunt();
+            Checking lab = new Checking();
 
             lab.PrintLabirynt();
-            lab.Check();
+            lab.FindEnter();
             lab.PrintShortestPath();
 
             Console.ReadKey();

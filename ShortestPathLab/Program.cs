@@ -4,49 +4,38 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace TestSpace
+namespace LabiryntSpace
 {
-
     partial class Labirunt
     {
-        delegate bool CheckIf(int i, int j);
-        delegate void Ck(int i, int j);
 
         public Labirunt()
         {
-            file = File.ReadAllLines("filee6.txt");
-            rows_count = file.Length;
-            cell_count = file[0].Length;
-            labirynt = new char[rows_count, cell_count];
-            wasHere = new bool[rows_count, cell_count];
-            shortestPath = new char[rows_count, cell_count];
-            correctPath1 = new char[rows_count, cell_count];
-            n = 0;
-            countOfSteps = new int[100];
-            for (int i = 0; i < file.Length; i++)
+            string[] file = File.ReadAllLines("filee6.txt");
+
+            //Розмір лабіринта
+            rowsCount = file.Length; //кількість стовпців
+            cellsCount = file[0].Length; //кількість рядків
+
+            labirynt = new char[rowsCount, cellsCount]; //лабіринт
+            //wasHere = new bool[rowsCount, cellsCount]; //масив для перевірки правильного шляху
+            //shortestPath = new char[rowsCount, cellsCount]; //найкоротший шлях
+            //min = 0;
+
+            for (int i = 0; i < rowsCount; i++)
             {
-                for (int j = 0; j < file[0].Length; j++)
+                for (int j = 0; j < cellsCount; j++)
                 {
-                    labirynt[i, j] = Convert.ToChar(file[i][j]);
-                    wasHere[i, j] = false;
-                }
-            }
-            for (int i = 0; i < file.Length; i++)
-            {
-                for (int j = 0; j < file[0].Length; j++)
-                {
-                    correctPath1[i, j] = '.';
-                    shortestPath[i, j] = '.';
+                    labirynt[i, j] = file[i][j]; //заповнюємо лабіринт даними
                 }
             }
         }
-
-        public void PrintLabirynt()
+        public void PrintLabirynt()  //Малює лабіринт
         {
             Console.WriteLine();
-            for (int i = 0; i < rows_count; i++)
+            for (int i = 0; i < rowsCount; i++)
             {
-                for (int j = 0; j < cell_count; j++)
+                for (int j = 0; j < cellsCount; j++)
                 {
                     Console.Write(labirynt[i, j]);
                 }
@@ -55,161 +44,150 @@ namespace TestSpace
             Console.WriteLine();
         }
 
-        public void PrintShortestPath()
+        
+    }
+
+    partial class Checking : Labirunt
+    {
+        public Checking()
         {
-            int pathLangth = 0;
-            Console.WriteLine("\n\n\n");
-            for (int i = 0; i < rows_count; i++)
+            wasHere = new bool[rowsCount, cellsCount]; //масив для перевірки правильного шляху
+            shortestPath = new char[rowsCount, cellsCount]; //найкоротший шлях
+            minLength = 0;
+
+            for (int i = 0; i < rowsCount; i++)
             {
-                for (int j = 0; j < cell_count; j++)
+                for (int j = 0; j < cellsCount; j++)
+                {
+                    wasHere[i, j] = false; //на пачатку у нас немає ніякого правильного шляху
+                }
+            }
+        }
+
+        public void PrintShortestPath() //Малює найкоротший шлях, який ми знайшли в функції FindShortestPath()
+        {
+            Console.WriteLine();
+            for (int i = 0; i < rowsCount; i++)
+            {
+                for (int j = 0; j < cellsCount; j++)
                 {
                     Console.Write(shortestPath[i, j]);
-                    if (shortestPath[i, j] == '+')
-                        pathLangth++;
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine("This path has " + pathLangth + " steps and it is shortest");
         }
 
-        public void PrintPathes()
+        public void FindShortestPath()
         {
-            int count = 0;
-            for (int i = 0; i < rows_count; i++)
+            //рахуємо довжину шляху і записуємо її в countOfSteps
+            //в wasHere зберігається наш шлях
+            int countOfSteps = 0;
+            for (int i = 0; i < rowsCount; i++)
             {
-                for (int j = 0; j < cell_count; j++)
+                for (int j = 0; j < cellsCount; j++)
                 {
-                    //Console.Write(correctPath1[i, j]);
-                    if (correctPath1[i, j] == '+')
-                        count++;
+                    if (wasHere[i, j] == true)
+                        countOfSteps++;
                 }
-                //Console.WriteLine();
             }
-            //Console.WriteLine();
-            countOfSteps[n] = count;
 
-            int min = countOfSteps[0];
-            int indexx = 0;
-            if (n != 0)
+            //Кожен наступний шлях порівнюється з попереднім і коротший зберігається в shortestPath:
+
+            if (countOfSteps < minLength || minLength == 0) //Шукає найкоротшу довжину 
             {
-                if (countOfSteps[n] < min)
+                minLength = countOfSteps; // і зберігає її в "min" для подальшого порівняння
+
+                for (int i = 0; i < rowsCount; i++)
                 {
-                    min = countOfSteps[n];
-                    indexx = n;
-                    for (int i = 0; i < rows_count; i++)
+                    for (int j = 0; j < cellsCount; j++)
                     {
-                        for (int j = 0; j < cell_count; j++)
-                        {
-                            shortestPath[i, j] = correctPath1[i, j];
-                        }
+
+                        if (wasHere[i, j] == true)
+                            shortestPath[i, j] = '+';  //плюсами заповнюємо оптимальний шлях
+                        else
+                            shortestPath[i, j] = labirynt[i, j]; //заповнюємо так як в labirynt
                     }
                 }
             }
-            else
+        }
+
+        public void FindEnter() // ШУКАЄ ВХІД
+        {
+            for (int i = 0; i < rowsCount; i++)
             {
-                for (int i = 0; i < rows_count; i++)
+                for (int j = 0; j < cellsCount; j++)
                 {
-                    for (int j = 0; j < cell_count; j++)
+                    if (labirynt[i, j] == enter) //Якщо знайшли вихід
                     {
-                        shortestPath[i, j] = correctPath1[i, j];
+                        wasHere[i, j] = true; //то позначаємо, що даний крок правильний
+                        if (i == 0) CheckDown(i, j);              //Якщо вхід в лабіринт розташований зверху, то першу перевірку робимо вниз
+                        if (i == rowsCount - 1) CheckUp(i, j);    //Якщо вхід в лабіринт розташований знизу,  то першу перевірку робимо вверх
+                        if (j == 0) CheckRight(i, j);             //Якщо вхід в лабіринт розташований зліва,  то першу перевірку робимо праворуч
+                        if (j == cellsCount - 1) CheckLeft(i, j); //Якщо вхід в лабіринт розташований зправа, то першу перевірку робимо ліворуч
                     }
                 }
             }
-            Console.WriteLine("Path number " + (n+1) + " has " + count + " steps!");
-            n++;
         }
 
-        public void Check() // Шукає вхід
+        bool CheckExit(int i, int j) //ПЕРЕВІРЯЄ, ЧИ Є ВИХІД
         {
-            for (int i = 0; i < rows_count; i++)
+            if (labirynt[i, j] == exit) //Якщо на даному кроці є вихід
             {
-                for (int j = 0; j < cell_count; j++)
-                {
-                    if (labirynt[i, j] == enter) // Коли ми знайшли вхід, ми перевіряємо, куди можна піти
-                    {
-                        wasHere[i, j] = true;
-                        CheckDown(i, j);
-                    }
-                }
-            }
-
-        }
-
-         public bool CheckExit(int i, int j)
-        {
-            if (labirynt[i, j - 1] == exit)
-            {
-                correctPath1[i, j] = '+';
-                correctPath1[i, j - 1] = '+';
-                PrintPathes();
-                return true;
-            }
-            if (labirynt[i, j + 1] == exit)
-            {
-                correctPath1[i, j] = '+';
-                correctPath1[i, j + 1] = '+';
-                PrintPathes();
-                return true;
-            }
-            if (labirynt[i - 1, j] == exit)
-            {
-                correctPath1[i, j] = '+';
-                correctPath1[i - 1, j] = '+';
-                PrintPathes();
-                return true;
-            }
-            if (labirynt[i + 1, j] == exit)
-            {
-                correctPath1[i, j] = '+';
-                correctPath1[i + 1, j] = '+';
-                PrintPathes();
+                wasHere[i, j] = true; //то позначаємо, що даний крок правильний
                 return true;
             }
             return false;
         }
 
-        void GeneralCheck(int i, int j, int i1, int j1, Ck Func1, Ck Func2, Ck Func3)
-        {
-            if (labirynt[i1, j1] == freeway && wasHere[i1, j1] == false)
-            {
-                correctPath1[i, j] = '+';
-                wasHere[i, j] = true;
 
-                if (CheckExit(i1, j1) != true)
+        //Цю функцію викликає фукнція CheckLeft, або CheckDown, або CheckRight, або CheckUp
+        //Від того, яка функція викликає залежить, яку сторону перевіряємо
+        void GeneralCheck(int i, int j, int i1, int j1, Function Func1, Function Func2, Function Func3) //ПЕРЕВІРЯЄ, ЧИ Є СТІНА
+        {
+            if (labirynt[i1, j1] == freeway && wasHere[i1, j1] == false) //Якщо в даному напрямку немає стіни і якщо ми там ще не були, то:
+            {
+                wasHere[i, j] = true; //Позначаємо, що попередній крок пройдений
+
+
+                // На даному кроці перевіряємо, чи є вихід праворуч, ліворуч, зверху чи знизу від нього
+                //          /ЗНИЗУ\                   /ЗВЕРХУ\                 /ПРАВОРУЧ\               /ЛІВОРУЧ\
+                if (CheckExit(i1 + 1, j1) || CheckExit(i1 - 1, j1) || CheckExit(i1, j1 + 1) || CheckExit(i1, j1 - 1))
+                {
+                    wasHere[i1, j1] = true; //Позначаємо, що даний крок пройдений
+                    FindShortestPath(); //Записуємо знайдений вихід
+                    wasHere[i1, j1] = false; //Після того, як записали, даний крок позначимо як ще непройдений
+                }
+                else //Якщо виходу не знайшли, то перевіряємо наступні три напрямки
                 {
                     Func1(i1, j1);
                     Func2(i1, j1);
                     Func3(i1, j1);
                 }
-                correctPath1[i1, j1] = ' ';
-                wasHere[i1, j1] = false;
             }
-            correctPath1[i, j] = ' ';
+            //Якщо в даному напрямку є стіна, то ми вертаємося назад і позначаємо, що крок ще непройденим
             wasHere[i, j] = false;
         }
 
-        void CheckLeft(int i, int j)
+        void CheckLeft(int i, int j) //На даному кроці зміщаємося вліво
         {
-            int j1 = j - 1;
-            GeneralCheck(i, j, i, j1, CheckUp, CheckLeft, CheckDown);
+            //функції GeneralCheck передадуться (CheckUp, CheckLeft, CheckDown) в (Func1, Func2, Func3) відповідно
+            GeneralCheck(i, j, i, j - 1, CheckUp, CheckLeft, CheckDown);
         }
 
         void CheckDown(int i, int j)
         {
-            int i1 = i + 1;
-            GeneralCheck(i, j, i1, j, CheckLeft, CheckDown, CheckRight);
+            GeneralCheck(i, j, i + 1, j, CheckLeft, CheckDown, CheckRight);
         }
 
         void CheckRight(int i, int j)
         {
-            int j1 = j + 1;
-            GeneralCheck(i, j, i, j1, CheckDown, CheckRight, CheckUp);
+            GeneralCheck(i, j, i, j + 1, CheckDown, CheckRight, CheckUp);
         }
 
         void CheckUp(int i, int j)
         {
-            int i1 = i - 1;
-            GeneralCheck(i, j, i1, j, CheckRight, CheckUp, CheckLeft);
+            GeneralCheck(i, j, i - 1, j, CheckRight, CheckUp, CheckLeft);
         }
     }
+
 }
