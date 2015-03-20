@@ -7,18 +7,23 @@ using System.IO;
 namespace LabiryntSpace
 {
     delegate void Function(int i, int j);
-    //public partial interface ISeries
-    //{
-    //    void PrintLabirynt();
-    //    void PrintShortestPath();
-    //    void FindShortestPath();
-    //    void FindEnter(); // Шукає вхід
-    //    void CheckLeft(int i, int j);
-    //    void CheckDown(int i, int j);
-    //    void CheckRight(int i, int j);
-    //    void CheckUp(int i, int j);
-    //}
-    partial class Labirunt 
+    public partial interface FunctionsInLabirynt
+    {
+        void PrintLabirynt();
+    }
+
+    public partial interface FunctionsInChecking
+    {
+        void PrintShortestPath();
+        void FindShortestPath();
+        void FindEnter(); // Шукає вхід
+        void CheckLeft(int i, int j);
+        void CheckDown(int i, int j);
+        void CheckRight(int i, int j);
+        void CheckUp(int i, int j);
+        bool CheckExit(int i, int j);
+    }
+    partial class Labirunt : FunctionsInLabirynt
     {
         protected char[,] labirynt;
         protected int rowsCount;
@@ -28,7 +33,7 @@ namespace LabiryntSpace
         protected const char exit = '3';  
     }
 
-    partial class Checking : Labirunt
+    partial class Checking : Labirunt, FunctionsInChecking
     {
         char[,] shortestPath;
         bool[,] wasHere;

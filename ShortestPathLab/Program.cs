@@ -6,9 +6,8 @@ using System.IO;
 
 namespace LabiryntSpace
 {
-    partial class Labirunt
+    partial class Labirunt : FunctionsInLabirynt
     {
-
         public Labirunt()
         {
             string[] file = File.ReadAllLines("filee6.txt");
@@ -18,9 +17,6 @@ namespace LabiryntSpace
             cellsCount = file[0].Length; //кількість рядків
 
             labirynt = new char[rowsCount, cellsCount]; //лабіринт
-            //wasHere = new bool[rowsCount, cellsCount]; //масив для перевірки правильного шляху
-            //shortestPath = new char[rowsCount, cellsCount]; //найкоротший шлях
-            //min = 0;
 
             for (int i = 0; i < rowsCount; i++)
             {
@@ -43,11 +39,9 @@ namespace LabiryntSpace
             }
             Console.WriteLine();
         }
-
-        
     }
 
-    partial class Checking : Labirunt
+    partial class Checking : Labirunt, FunctionsInChecking
     {
         public Checking()
         {
@@ -95,7 +89,7 @@ namespace LabiryntSpace
 
             if (countOfSteps < minLength || minLength == 0) //Шукає найкоротшу довжину 
             {
-                minLength = countOfSteps; // і зберігає її в "min" для подальшого порівняння
+                minLength = countOfSteps; // і зберігає її в "minLength" для подальшого порівняння
 
                 for (int i = 0; i < rowsCount; i++)
                 {
@@ -105,7 +99,7 @@ namespace LabiryntSpace
                         if (wasHere[i, j] == true)
                             shortestPath[i, j] = '+';  //плюсами заповнюємо оптимальний шлях
                         else
-                            shortestPath[i, j] = labirynt[i, j]; //заповнюємо так як в labirynt
+                            shortestPath[i, j] = labirynt[i, j]; //все інше заповнюємо так як в labirynt
                     }
                 }
             }
@@ -129,7 +123,7 @@ namespace LabiryntSpace
             }
         }
 
-        bool CheckExit(int i, int j) //ПЕРЕВІРЯЄ, ЧИ Є ВИХІД
+        public bool CheckExit(int i, int j) //ПЕРЕВІРЯЄ, ЧИ Є ВИХІД
         {
             if (labirynt[i, j] == exit) //Якщо на даному кроці є вихід
             {
@@ -168,23 +162,23 @@ namespace LabiryntSpace
             wasHere[i, j] = false;
         }
 
-        void CheckLeft(int i, int j) //На даному кроці зміщаємося вліво
+        public void CheckLeft(int i, int j) //На даному кроці зміщаємося вліво
         {
             //функції GeneralCheck передадуться (CheckUp, CheckLeft, CheckDown) в (Func1, Func2, Func3) відповідно
             GeneralCheck(i, j, i, j - 1, CheckUp, CheckLeft, CheckDown);
         }
 
-        void CheckDown(int i, int j)
+        public void CheckDown(int i, int j)
         {
             GeneralCheck(i, j, i + 1, j, CheckLeft, CheckDown, CheckRight);
         }
 
-        void CheckRight(int i, int j)
+        public void CheckRight(int i, int j)
         {
             GeneralCheck(i, j, i, j + 1, CheckDown, CheckRight, CheckUp);
         }
 
-        void CheckUp(int i, int j)
+        public void CheckUp(int i, int j)
         {
             GeneralCheck(i, j, i - 1, j, CheckRight, CheckUp, CheckLeft);
         }
