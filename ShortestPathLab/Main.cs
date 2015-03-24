@@ -11,18 +11,6 @@ namespace LabiryntSpace
         public static void Main(string[] args)
         {
 
-            FileStream fin;
-            try
-            {
-                fin = new FileStream(args[0], FileMode.Open);
-            }
-            catch (IOException exc)
-            {
-                Console.WriteLine("Помилка! Не вдається вiдкрити файл!");
-                Console.WriteLine(exc.Message);
-                return;
-            }
-
             Checking lab = new Checking(args[0]);
 
             //Checking lab = new Checking("data.txt");
