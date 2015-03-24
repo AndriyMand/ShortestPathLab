@@ -10,19 +10,19 @@ namespace LabiryntSpace
     {
         public Labirunt()
         {
-            string[] file = File.ReadAllLines("filee6.txt");
+            string[] file = File.ReadAllLines("data.txt");
 
             //Розмір лабіринта
             rowsCount = file.Length; //кількість стовпців
             cellsCount = file[0].Length; //кількість рядків
 
-            labirynt = new char[rowsCount, cellsCount]; //лабіринт
+            labirynt = new int[rowsCount, cellsCount]; //лабіринт
 
             for (int i = 0; i < rowsCount; i++)
             {
                 for (int j = 0; j < cellsCount; j++)
                 {
-                    labirynt[i, j] = file[i][j]; //заповнюємо лабіринт даними
+                    labirynt[i, j] = Convert.ToInt32(Convert.ToString(file[i][j])); //заповнюємо лабіринт даними
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace LabiryntSpace
                         if (wasHere[i, j] == true)
                             shortestPath[i, j] = '+';  //плюсами заповнюємо оптимальний шлях
                         else
-                            shortestPath[i, j] = labirynt[i, j]; //все інше заповнюємо так як в labirynt
+                            shortestPath[i, j] = Convert.ToChar(labirynt[i, j]); //все інше заповнюємо так як в labirynt
                     }
                 }
             }

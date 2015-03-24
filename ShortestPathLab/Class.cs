@@ -25,12 +25,12 @@ namespace LabiryntSpace
     }
     partial class Labirunt : FunctionsInLabirynt
     {
-        protected char[,] labirynt;
+        protected int[,] labirynt;
         protected int rowsCount;
         protected int cellsCount;
-        protected const char freeway = '0';
-        protected const char enter = '2';
-        protected const char exit = '3';  
+        protected const int freeway = 0;
+        protected const int enter = 2;
+        protected const int exit = 3;  
     }
 
     partial class Checking : Labirunt, FunctionsInChecking
