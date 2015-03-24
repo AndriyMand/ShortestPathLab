@@ -8,9 +8,10 @@ namespace LabiryntSpace
 {
     partial class Labirunt : FunctionsInLabirynt
     {
-        public Labirunt()
+        public Labirunt(string list)
         {
-            string[] file = File.ReadAllLines("data.txt");
+            //string list = "data.txt";
+            string[] file = File.ReadAllLines(list);
 
             //Розмір лабіринта
             rowsCount = file.Length; //кількість стовпців
@@ -43,7 +44,7 @@ namespace LabiryntSpace
 
     partial class Checking : Labirunt, FunctionsInChecking
     {
-        public Checking()
+        public Checking(string list) : base(list)
         {
             wasHere = new bool[rowsCount, cellsCount]; //масив для перевірки правильного шляху
             shortestPath = new char[rowsCount, cellsCount]; //найкоротший шлях
