@@ -6,3 +6,4 @@ E:\Andriy\1.Навчання\C#home\ShortestPathLab\ShortestPathLab\obj\x86\Debu
 E:\Andriy\1.Навчання\C#home\ShortestPathLab\ShortestPathLab\obj\x86\Debug\ShortestPathLab.pdb
 E:\Andriy\1.Навчання\C#home\ShortestPathLab\ShortestPathLab\bin\Debug\ShortestPathLab.exe
 E:\Andriy\1.Навчання\C#home\ShortestPathLab\ShortestPathLab\bin\Debug\ShortestPathLab.pdb
+E:\Andriy\1.Навчання\C#home\ShortestPathLab\ShortestPathLab\obj\x86\Debug\ShortestPathLab.csprojResolveAssemblyReference.cache

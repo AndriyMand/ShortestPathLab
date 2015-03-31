@@ -10,16 +10,23 @@ namespace LabiryntSpace
     {
         public static void Main(string[] args)
         {
+            try
+            {
+                Checking lab = new Checking(args[0]); //Створюємо об'єкт типу Checking в якому створюємо об'єкт типу Labirynt
+                PrintLabiryntClass printLab = new PrintLabiryntClass(lab); //конструктор цього класу малює лабіринт
 
-            Checking lab = new Checking(args[0]);
+                lab.FindEnterAndStartChecking(); //здійснюється пошук шляху
 
-            //Checking lab = new Checking("data.txt");
+                PrintShortestPathClass shortestPath = new PrintShortestPathClass(lab); //конструктор цього класу малює найкоротший шлях
+            }
+            catch (IOException exc)
+            {
+                Console.WriteLine(exc.Message);
+                Console.WriteLine("Файл не знайдено або у файлі містяться неправильні дані! \nВзято лабіринт за замовчуванням.");
+            }
+            
 
-
-
-            lab.PrintLabirynt();
-            lab.FindEnter();
-            lab.PrintShortestPath();
+            
 
             Console.ReadKey();
         }

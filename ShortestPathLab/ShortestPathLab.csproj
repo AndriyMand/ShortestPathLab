@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class.cs" />
+    <Compile Include="CheckingClass.cs" />
+    <Compile Include="LabiryntClass.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="PrintLabiryntClass.cs" />
+    <Compile Include="PrintShortestPathClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
